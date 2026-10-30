@@ -61,7 +61,7 @@ textarea {
   top: 0;
   z-index: 20;
   backdrop-filter: blur(20px);
-  background: rgba(7, 17, 31, 0.7);
+  background: rgba(7, 17, 31, 0.72);
   border-bottom: 1px solid var(--line);
 }
 
@@ -288,7 +288,9 @@ textarea {
 .chart-header,
 .activity-list p,
 .project-card li,
-.testimonial footer {
+.testimonial footer,
+.plan-desc,
+.faq-answer p {
   color: var(--muted);
 }
 
@@ -417,7 +419,8 @@ textarea {
 
 .services-grid,
 .process-grid,
-.testimonial-grid {
+.testimonial-grid,
+.pricing-grid {
   display: grid;
   gap: 1.2rem;
 }
@@ -430,7 +433,9 @@ textarea {
 .process-step,
 .testimonial,
 .project-card,
-.about-card {
+.about-card,
+.pricing-card,
+.faq-item {
   border: 1px solid var(--line);
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.02);
@@ -456,7 +461,8 @@ textarea {
 .service-card h3,
 .project-card h3,
 .process-step h3,
-.pulse-card h3 {
+.pulse-card h3,
+.pricing-card h3 {
   margin: 0 0 0.7rem;
   font-size: 1.5rem;
   letter-spacing: -0.04em;
@@ -467,7 +473,9 @@ textarea {
 .process-step p,
 .about-copy p,
 .pulse-card p,
-.testimonial {
+.testimonial,
+.plan-desc,
+.faq-answer p {
   margin: 0;
   line-height: 1.7;
   color: var(--muted);
@@ -538,6 +546,124 @@ textarea {
   margin: 1rem 0 0;
   display: grid;
   gap: 0.5rem;
+}
+
+.pricing-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.pricing-card {
+  padding: 1.8rem;
+  position: relative;
+}
+
+.pricing-card.featured {
+  background: linear-gradient(180deg, rgba(124, 156, 255, 0.12), rgba(255, 255, 255, 0.04));
+  border-color: rgba(124, 156, 255, 0.35);
+}
+
+.popular {
+  display: inline-block;
+  margin-bottom: 1rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(124, 156, 255, 0.15);
+  color: var(--primary-2);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.plan-name {
+  margin: 0 0 0.7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.pricing-card h3 {
+  font-size: 2.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.pricing-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 1.2rem 0 1.5rem;
+  display: grid;
+  gap: 0.7rem;
+  color: var(--text);
+}
+
+.pricing-card ul li {
+  position: relative;
+  padding-left: 1.3rem;
+}
+
+.pricing-card ul li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--primary-2);
+  font-weight: 800;
+}
+
+.faq-wrap {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 1.4rem;
+  align-items: start;
+}
+
+.faq-head {
+  margin-bottom: 0;
+}
+
+.faq-list {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.faq-item {
+  overflow: hidden;
+}
+
+.faq-question {
+  width: 100%;
+  background: transparent;
+  color: var(--text);
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.faq-question span {
+  font-size: 1.5rem;
+  color: var(--primary-2);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+
+.faq-item.active .faq-answer {
+  max-height: 180px;
+}
+
+.faq-answer p {
+  padding: 0 1.2rem 1.2rem;
 }
 
 .about-grid {
@@ -658,12 +784,15 @@ textarea {
   .services-grid,
   .showcase-grid,
   .testimonial-grid,
-  .process-grid {
+  .process-grid,
+  .pricing-grid,
+  .faq-wrap {
     grid-template-columns: 1fr 1fr;
   }
 
   .about-grid,
-  .hero-grid {
+  .hero-grid,
+  .faq-wrap {
     grid-template-columns: 1fr;
   }
 
@@ -706,6 +835,7 @@ textarea {
   .showcase-grid,
   .testimonial-grid,
   .process-grid,
+  .pricing-grid,
   .logos-row {
     grid-template-columns: 1fr;
   }
