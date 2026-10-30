@@ -31,6 +31,10 @@ body {
   color: var(--text);
 }
 
+body.rtl {
+  direction: rtl;
+}
+
 img {
   max-width: 100%;
   display: block;
@@ -91,6 +95,35 @@ textarea {
   background: linear-gradient(135deg, var(--primary), var(--primary-2));
   color: #08131f;
   font-weight: 800;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.lang-switcher {
+  display: inline-flex;
+  padding: 0.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+.lang-btn {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.lang-btn.active {
+  background: rgba(124, 156, 255, 0.12);
+  color: var(--text);
 }
 
 .main-nav {
@@ -611,6 +644,19 @@ textarea {
   font-weight: 800;
 }
 
+body.rtl .pricing-card ul li,
+body.rtl .project-card ul,
+body.rtl .check-list span,
+body.rtl .faq-question {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+body.rtl .pricing-card ul li::before {
+  left: auto;
+  right: 0;
+}
+
 .faq-wrap {
   display: grid;
   grid-template-columns: 0.8fr 1.2fr;
@@ -645,6 +691,10 @@ textarea {
   padding: 1.1rem 1.2rem;
   font-size: 1rem;
   font-weight: 600;
+}
+
+body.rtl .faq-question {
+  text-align: right;
 }
 
 .faq-question span {
@@ -821,6 +871,11 @@ textarea {
     border-radius: 18px;
     background: rgba(7, 17, 31, 0.94);
     box-shadow: var(--shadow) 0 24px 64px;
+  }
+
+  body.rtl .main-nav {
+    left: auto;
+    right: 1rem;
   }
 
   .main-nav.open {
