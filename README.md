@@ -1,40 +1,39 @@
-# MIC DIGITAL PRODUCT 🚀
+const navToggle = document.querySelector('.nav-toggle');
+const mainNav = document.querySelector('.main-nav');
+const yearEl = document.getElementById('year');
 
-Bienvenue sur mon profil GitHub !
+if (yearEl) {
+  yearEl.textContent = new Date().getFullYear();
+}
 
-Je crée des solutions numériques, des projets éducatifs et des produits innovants pour apprendre, innover et partager des connaissances.
+if (navToggle && mainNav) {
+  navToggle.addEventListener('click', () => {
+    const isOpen = mainNav.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', String(isOpen));
+  });
 
-## À propos
-- Développement web
-- Logiciel & automatisation
-- Produits digitaux
-- Apprentissage continu
-- Création de projets utiles
+  mainNav.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      mainNav.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
 
-## Compétences
-- HTML / CSS / JavaScript
-- React / Next.js
-- Python
-- Git / GitHub
-- UI/UX
-- Bases de données
-- APIs
+const revealItems = document.querySelectorAll('.reveal');
 
-## Projets
-- [Portfolio](https://github.com/tonpseudo/portfolio)
-- [E-learning Platform](https://github.com/tonpseudo/education)
-- [Digital Product](https://github.com/tonpseudo/digital-product)
+const revealObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  },
+  {
+    threshold: 0.12,
+  }
+);
 
-## Formation & apprentissage
-- Développement web
-- Programmation
-- Design & UX
-- Productivité digitale
-
-## Statistiques GitHub
-![GitHub Stats](https://github-readme-stats.vercel.app/api?username=tonpseudo&show_icons=true&theme=dark)
-
-## Contact
-- Email : micdigitalproduct@gmail.com
-- LinkedIn : linkedin.com/in/tonpseudo
-- Portfolio : tonsite.com# MIC-DIGITAL-PRODUCT
+revealItems.forEach((item) => revealObserver.observe(item));
