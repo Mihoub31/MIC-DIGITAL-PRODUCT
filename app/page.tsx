@@ -363,7 +363,7 @@ export default function Page() {
           <div className="contact-card">
             <form
               className="contact-form"
-              action="https://formsubmit.co/hello@creatorpilot.ai"
+              action="https://formsubmit.co/micdigitalproduct@gmail.com"
               method="POST"
             >
               <div className="field-row two-col">
