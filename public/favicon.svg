@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#070B12"/>
+  <circle cx="192" cy="110" r="180" fill="#89A8FF" fill-opacity="0.18"/>
+  <circle cx="1060" cy="540" r="220" fill="#7EF0D1" fill-opacity="0.13"/>
+  <rect x="80" y="70" width="184" height="52" rx="16" fill="#101D2C" stroke="#2B3C53"/>
+  <rect x="96" y="86" width="32" height="32" rx="10" fill="url(#paint0_linear_1_2)"/>
+  <text x="140" y="109" fill="#F4F8FF" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="800">CreatorPilot</text>
+  <text x="80" y="250" fill="#F4F8FF" font-family="Inter, Arial, sans-serif" font-size="68" font-weight="800">Build content</text>
+  <text x="80" y="326" fill="#F4F8FF" font-family="Inter, Arial, sans-serif" font-size="68" font-weight="800">systems that scale.</text>
+  <text x="80" y="392" fill="#9BB0C8" font-family="Inter, Arial, sans-serif" font-size="28">Turn one idea into scripts, video plans, thumbnails, and publishing workflows.</text>
+  <rect x="80" y="448" width="220" height="60" rx="18" fill="url(#paint1_linear_1_2)"/>
+  <text x="122" y="487" fill="#07111D" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800">Start free trial</text>
+  <rect x="798" y="131" width="306" height="320" rx="28" fill="#101D2C" stroke="#273B52"/>
+  <rect x="830" y="165" width="244" height="54" rx="18" fill="#0D1724" stroke="#2B3C53"/>
+  <rect x="848" y="181" width="92" height="20" rx="10" fill="#89A8FF" fill-opacity="0.6"/>
+  <rect x="958" y="181" width="68" height="20" rx="10" fill="#7EF0D1" fill-opacity="0.5"/>
+  <rect x="830" y="244" width="104" height="118" rx="18" fill="#0D1724" stroke="#2B3C53"/>
+  <rect x="950" y="244" width="110" height="104" rx="18" fill="#0D1724" stroke="#2B3C53"/>
+  <rect x="830" y="380" width="230" height="12" rx="6" fill="#2B3C53"/>
+  <rect x="830" y="404" width="180" height="12" rx="6" fill="#2B3C53"/>
+  <path d="M864 314L889 291L908 307L935 269L979 314H864Z" fill="#7EF0D1" fill-opacity="0.75"/>
+  <path d="M965 317L981 289L991 301L1002 273L1044 317H965Z" fill="#89A8FF" fill-opacity="0.75"/>
+  <defs>
+    <linearGradient id="paint0_linear_1_2" x1="96" y1="86" x2="128" y2="118" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F5D48D"/>
+      <stop offset="0.52" stop-color="#89A8FF"/>
+      <stop offset="1" stop-color="#7EF0D1"/>
+    </linearGradient>
+    <linearGradient id="paint1_linear_1_2" x1="80" y1="448" x2="300" y2="508" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F5D48D"/>
+      <stop offset="0.5" stop-color="#C7D7FF"/>
+      <stop offset="1" stop-color="#7EF0D1"/>
+    </linearGradient>
+  </defs>
+</svg>
