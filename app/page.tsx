@@ -39,6 +39,8 @@ const trustMetrics = [
   { value: '24/7', label: 'AI automation' }
 ];
 
+const proofLogos = ['Notion', 'Stripe', 'Figma', 'Slack', 'HubSpot', 'Airtable'];
+
 const testimonials = [
   {
     quote: 'CreatorPilot gave our content team a repeatable production engine. We publish faster and with more consistency.',
@@ -54,6 +56,24 @@ const testimonials = [
     quote: 'We finally have a way to scale video storytelling without hiring a huge production team.',
     author: 'Samir Haddad',
     role: 'Product Marketer, SaaS Brand'
+  }
+];
+
+const customerProof = [
+  {
+    stat: '6.2x',
+    label: 'average increase in publishing velocity',
+    detail: 'Teams launch more campaigns without adding more headcount.'
+  },
+  {
+    stat: '74%',
+    label: 'more content output with the same team',
+    detail: 'AI-assisted planning and repurposing keeps teams focused.'
+  },
+  {
+    stat: '3.1x',
+    label: 'faster turnaround on campaign launch',
+    detail: 'From brief to production cycle in one streamlined system.'
   }
 ];
 
@@ -105,7 +125,7 @@ export default function Page() {
           </div>
 
           <div className="hero-visual">
-            <div className="glass-card dashboard-card">
+            <div className="glass-card dashboard-card animate-float">
               <div className="dashboard-topbar">
                 <span />
                 <span />
@@ -158,12 +178,109 @@ export default function Page() {
       </section>
 
       <section className="logos">
-        <div className="container logos-row" aria-label="Trusted by modern teams">
-          <span>Creators</span>
-          <span>Agencies</span>
-          <span>Brands</span>
-          <span>Founders</span>
-          <span>Teams</span>
+        <div className="container">
+          <p className="section-label">Trusted by modern content teams</p>
+          <div className="logo-row" aria-label="Partner brands and teams">
+            {proofLogos.map((logo) => (
+              <span key={logo} className="logo-pill">{logo}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-head">
+            <span className="eyebrow">See it in action</span>
+            <h2>Built to make content production feel effortless.</h2>
+          </div>
+
+          <div className="mockup-grid">
+            <div className="mockup-column">
+              <div className="mockup-card mockup-window animate-rise">
+                <div className="shot-header">
+                  <div className="shot-dots">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                  <span className="shot-badge">Campaign dashboard</span>
+                </div>
+                <div className="shot-body">
+                  <div className="story-row">
+                    <div className="story-block story-large"></div>
+                    <div className="story-stack">
+                      <div className="story-block story-small"></div>
+                      <div className="story-block story-medium"></div>
+                    </div>
+                  </div>
+                  <div className="list-row">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                  <div className="mini-chart">
+                    <span style={{ height: '30%' }} />
+                    <span style={{ height: '48%' }} />
+                    <span style={{ height: '62%' }} />
+                    <span style={{ height: '82%' }} />
+                    <span style={{ height: '100%' }} />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mockup-column stack-column">
+              <div className="mockup-card mini-panel animate-rise delay-1">
+                <div className="mini-header">
+                  <span className="eyebrow tiny-eyebrow">Auto-script</span>
+                  <span className="status-dot">Live</span>
+                </div>
+                <h3>Hook + CTA generator</h3>
+                <p>Turn a single idea into a script outline, story arc, and strong first sentence in seconds.</p>
+                <div className="tag-group">
+                  <span>Hook</span>
+                  <span>Scene</span>
+                  <span>CTA</span>
+                </div>
+              </div>
+
+              <div className="mockup-card mini-panel animate-rise delay-2">
+                <div className="mini-header">
+                  <span className="eyebrow tiny-eyebrow">Publishing</span>
+                </div>
+                <div className="schedule-row">
+                  <div>
+                    <strong>09:30</strong>
+                    <span>Post to YouTube</span>
+                  </div>
+                  <div>
+                    <strong>12:00</strong>
+                    <span>Schedule Shorts</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section section-alt">
+        <div className="container">
+          <div className="section-head">
+            <span className="eyebrow">Proof</span>
+            <h2>Teams scale faster when the workflow is clear.</h2>
+          </div>
+
+          <div className="proof-grid">
+            {customerProof.map((item) => (
+              <article key={item.label} className="proof-card">
+                <strong>{item.stat}</strong>
+                <h3>{item.label}</h3>
+                <p>{item.detail}</p>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -264,6 +381,28 @@ export default function Page() {
               </blockquote>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="section newsletter-section">
+        <div className="container newsletter-grid">
+          <div className="newsletter-copy">
+            <span className="eyebrow">Free growth kit</span>
+            <h2>Get the 7-day creator growth playbook.</h2>
+            <p>
+              Join the newsletter for a simple system to generate better scripts, stronger hooks,
+              and a cleaner publishing routine without burning out your team.
+            </p>
+          </div>
+
+          <form action="https://formsubmit.co/micdigitalproduct@gmail.com" method="POST" className="newsletter-form">
+            <div className="input-group">
+              <input type="email" name="email" placeholder="Enter your work email" required />
+              <button type="submit" className="btn btn-primary">Get the kit</button>
+            </div>
+            <input type="hidden" name="_subject" value="New CreatorPilot growth kit request" />
+            <input type="hidden" name="_captcha" value="false" />
+          </form>
         </div>
       </section>
 
