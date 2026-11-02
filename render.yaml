@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: mic-digital-product-static
+    name: mic-digital-product
     runtime: static
-    buildCommand: echo "No build step required"
-    staticPublishPath: .
+    buildCommand: npm install && npm run build
+    staticPublishPath: out
