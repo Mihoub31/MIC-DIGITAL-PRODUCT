@@ -1,0 +1,29 @@
+{
+  "name": "mic-digital-product",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "dependencies": { "express": "^4.19.2", "pg": "^8.12.0" }
+}
+const express = require('express');
+const { Pool } = require('pg');
+
+const app = express();
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+});
+
+app.use(express.static(__dirname));
+
+app.get('/health', async (req, res) => {
+  try {
+    await pool.query('select 1');
+    res.json({ ok: true, db: true });
+  } catch (e) {
+    res.status(500).json({ ok: false, db: false });
+  }
+});
+
+app.listen(process.env.PORT || 3000);
+
