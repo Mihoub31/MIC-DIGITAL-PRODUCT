@@ -1,5 +1,6 @@
 import './globals.css';
 import type { ReactNode } from 'react';
+import { LanguageProvider } from './i18n';
 import LanguageSwitcher from './LanguageSwitcher';
 
 export const metadata = {
@@ -11,8 +12,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fr" dir="ltr" suppressHydrationWarning>
       <body>
-        <LanguageSwitcher />
-        {children}
+        <LanguageProvider>
+          <LanguageSwitcher />
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );
