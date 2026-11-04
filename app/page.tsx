@@ -2,36 +2,12 @@ import Link from 'next/link';
 import { T } from './i18n';
 
 const features = [
-  {
-    number: '01',
-    title: 'AI script studio',
-    text: 'Generate hooks, scripts, storylines, and script variations for creators, agencies, and product teams.'
-  },
-  {
-    number: '02',
-    title: 'Video planning',
-    text: 'Turn any idea into scenes, shot lists, B-roll prompts, and structured publishing systems.'
-  },
-  {
-    number: '03',
-    title: 'Voiceover & narration',
-    text: 'Convert scripts into polished voice tracks with natural pacing and tailored tone.'
-  },
-  {
-    number: '04',
-    title: 'Thumbnail & title engine',
-    text: 'Create attention-grabbing titles and thumbnail concepts designed to increase click-through.'
-  },
-  {
-    number: '05',
-    title: 'Publishing workflow',
-    text: 'Schedule and distribute content across channels without losing consistency or strategic focus.'
-  },
-  {
-    number: '06',
-    title: 'Analytics & optimization',
-    text: 'Measure what performs best and automatically recommend next steps based on your content data.'
-  }
+  { number: '01', title: 'feat_1_title', text: 'feat_1_text' },
+  { number: '02', title: 'feat_2_title', text: 'feat_2_text' },
+  { number: '03', title: 'feat_3_title', text: 'feat_3_text' },
+  { number: '04', title: 'feat_4_title', text: 'feat_4_text' },
+  { number: '05', title: 'feat_5_title', text: 'feat_5_text' },
+  { number: '06', title: 'feat_6_title', text: 'feat_6_text' }
 ];
 
 const trustMetrics = [
@@ -61,21 +37,9 @@ const testimonials = [
 ];
 
 const customerProof = [
-  {
-    stat: '6.2x',
-    label: 'average increase in publishing velocity',
-    detail: 'Teams launch more campaigns without adding more headcount.'
-  },
-  {
-    stat: '74%',
-    label: 'more content output with the same team',
-    detail: 'AI-assisted planning and repurposing keeps teams focused.'
-  },
-  {
-    stat: '3.1x',
-    label: 'faster turnaround on campaign launch',
-    detail: 'From brief to production cycle in one streamlined system.'
-  }
+  { stat: '6.2x', label: 'proof_1_label', detail: 'proof_1_detail' },
+  { stat: '74%', label: 'proof_2_label', detail: 'proof_2_detail' },
+  { stat: '3.1x', label: 'proof_3_label', detail: 'proof_3_detail' }
 ];
 
 export default function Page() {
@@ -134,19 +98,19 @@ export default function Page() {
               <div className="dashboard-body">
                 <div className="metric-row">
                   <div className="metric large-metric">
-                    <small>Campaigns</small>
+                    <small><T k="dash_campaigns" /></small>
                     <strong>48</strong>
                     <span className="trend up">+214%</span>
                   </div>
                   <div className="metric mini-metric">
-                    <small>Videos</small>
+                    <small><T k="dash_videos" /></small>
                     <strong>19</strong>
                   </div>
                 </div>
 
                 <div className="chart-block">
                   <div className="chart-header">
-                    <span>Content growth</span>
+                    <span><T k="dash_growth" /></span>
                     <span className="chip">Q3</span>
                   </div>
                   <div className="bars" aria-hidden="true">
@@ -163,11 +127,11 @@ export default function Page() {
                 <div className="activity-list">
                   <div>
                     <span className="dot green" />
-                    <p>New script batch generated</p>
+                    <p><T k="dash_act1" /></p>
                   </div>
                   <div>
                     <span className="dot purple" />
-                    <p>Publishing workflow optimized</p>
+                    <p><T k="dash_act2" /></p>
                   </div>
                 </div>
               </div>
@@ -178,7 +142,7 @@ export default function Page() {
 
       <section className="logos">
         <div className="container">
-          <p className="section-label">Trusted by teams shipping content at scale</p>
+          <p className="section-label"><T k="logos_label" /></p>
           <div className="logo-row" aria-label="Trusted by modern teams and software brands">
             {proofLogos.map((logo) => (
               <span key={logo} className="logo-pill">{logo}</span>
@@ -190,8 +154,8 @@ export default function Page() {
       <section className="section">
         <div className="container">
           <div className="section-head">
-            <span className="eyebrow">See it in action</span>
-            <h2>Built to make content production feel effortless.</h2>
+            <span className="eyebrow"><T k="act_eyebrow" /></span>
+            <h2><T k="act_title" /></h2>
           </div>
 
           <div className="mockup-grid">
@@ -203,7 +167,7 @@ export default function Page() {
                     <span />
                     <span />
                   </div>
-                  <span className="shot-badge">Campaign dashboard</span>
+                  <span className="shot-badge"><T k="act_badge" /></span>
                 </div>
                 <div className="shot-body">
                   <div className="story-row">
@@ -232,30 +196,30 @@ export default function Page() {
             <div className="mockup-column stack-column">
               <div className="mockup-card mini-panel animate-rise delay-1">
                 <div className="mini-header">
-                  <span className="eyebrow tiny-eyebrow">Auto-script</span>
-                  <span className="status-dot">Live</span>
+                  <span className="eyebrow tiny-eyebrow"><T k="act_auto" /></span>
+                  <span className="status-dot"><T k="act_live" /></span>
                 </div>
-                <h3>Hook + CTA generator</h3>
-                <p>Turn a single idea into a script outline, story arc, and strong first sentence in seconds.</p>
+                <h3><T k="act_hook_title" /></h3>
+                <p><T k="act_hook_text" /></p>
                 <div className="tag-group">
-                  <span>Hook</span>
-                  <span>Scene</span>
-                  <span>CTA</span>
+                  <span><T k="tag_hook" /></span>
+                  <span><T k="tag_scene" /></span>
+                  <span><T k="tag_cta" /></span>
                 </div>
               </div>
 
               <div className="mockup-card mini-panel animate-rise delay-2">
                 <div className="mini-header">
-                  <span className="eyebrow tiny-eyebrow">Publishing</span>
+                  <span className="eyebrow tiny-eyebrow"><T k="act_publishing" /></span>
                 </div>
                 <div className="schedule-row">
                   <div>
                     <strong>09:30</strong>
-                    <span>Post to YouTube</span>
+                    <span><T k="act_post_yt" /></span>
                   </div>
                   <div>
                     <strong>12:00</strong>
-                    <span>Schedule Shorts</span>
+                    <span><T k="act_shorts" /></span>
                   </div>
                 </div>
               </div>
@@ -267,16 +231,16 @@ export default function Page() {
       <section className="section section-alt">
         <div className="container">
           <div className="section-head">
-            <span className="eyebrow">Proof</span>
-            <h2>Teams scale faster when the workflow is clear.</h2>
+            <span className="eyebrow"><T k="proof_eyebrow" /></span>
+            <h2><T k="proof_title" /></h2>
           </div>
 
           <div className="proof-grid">
             {customerProof.map((item) => (
               <article key={item.label} className="proof-card">
                 <strong>{item.stat}</strong>
-                <h3>{item.label}</h3>
-                <p>{item.detail}</p>
+                <h3><T k={item.label} /></h3>
+                <p><T k={item.detail} /></p>
               </article>
             ))}
           </div>
@@ -286,16 +250,16 @@ export default function Page() {
       <section className="section">
         <div className="container">
           <div className="section-head">
-            <span className="eyebrow">What it does</span>
-            <h2>Everything your content engine needs.</h2>
+            <span className="eyebrow"><T k="feat_eyebrow" /></span>
+            <h2><T k="feat_title" /></h2>
           </div>
 
           <div className="services-grid">
             {features.map((feature) => (
               <article className="service-card" key={feature.number}>
                 <div className="icon">{feature.number}</div>
-                <h3>{feature.title}</h3>
-                <p>{feature.text}</p>
+                <h3><T k={feature.title} /></h3>
+                <p><T k={feature.text} /></p>
               </article>
             ))}
           </div>
@@ -316,15 +280,15 @@ export default function Page() {
           <div className="stats-grid">
             <div className="stat-card glass-card">
               <strong>6.2x</strong>
-              <span>average increase in publishing velocity</span>
+              <span><T k="proof_1_label" /></span>
             </div>
             <div className="stat-card glass-card">
               <strong>74%</strong>
-              <span>more content output with the same team</span>
+              <span><T k="proof_2_label" /></span>
             </div>
             <div className="stat-card glass-card">
               <strong>3.1x</strong>
-              <span>faster turnaround on campaign launch</span>
+              <span><T k="proof_3_label" /></span>
             </div>
           </div>
         </div>
