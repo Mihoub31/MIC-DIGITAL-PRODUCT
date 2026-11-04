@@ -1,5 +1,5 @@
 import Link from 'next/link';
-
+import { T } from './i18n';
 const features = [
   {
     number: '01',
@@ -34,9 +34,9 @@ const features = [
 ];
 
 const trustMetrics = [
-  { value: '10x', label: 'faster content output' },
-  { value: '3 min', label: 'from prompt to script' },
-  { value: '24/7', label: 'AI automation' }
+  { value: '10x', key: 'trust_1' },
+  { value: '3 min', key: 'trust_2' },
+  { value: '24/7', key: 'trust_3' }
 ];
 
 const proofLogos = ['Notion', 'Stripe', 'Figma', 'Slack', 'HubSpot', 'Airtable'];
@@ -87,15 +87,13 @@ export default function Page() {
             <span>CreatorPilot</span>
           </Link>
 
-          <nav className="main-nav" aria-label="Main navigation">
-            <Link href="/features">Features</Link>
-            <Link href="/about">About</Link>
-            <Link href="/pricing">Pricing</Link>
-            <Link href="/contact">Contact</Link>
-            <Link href="/contact" className="btn btn-primary nav-cta">Start free</Link>
-          </nav>
-        </div>
-      </header>
+       <nav className="main-nav" aria-label="Main navigation">
+  <Link href="/features"><T k="nav_features" /></Link>
+  <Link href="/about"><T k="nav_about" /></Link>
+  <Link href="/pricing"><T k="nav_pricing" /></Link>
+  <Link href="/contact"><T k="nav_contact" /></Link>
+  <Link href="/contact" className="btn btn-primary nav-cta"><T k="nav_start" /></Link>
+</nav> 
 
       <section className="hero">
         <div className="container hero-grid">
@@ -132,18 +130,28 @@ export default function Page() {
                 <span />
               </div>
 
-              <div className="dashboard-body">
-                <div className="metric-row">
-                  <div className="metric large-metric">
-                    <small>Campaigns</small>
-                    <strong>48</strong>
-                    <span className="trend up">+214%</span>
-                  </div>
-                  <div className="metric mini-metric">
-                    <small>Videos</small>
-                    <strong>19</strong>
-                  </div>
-                </div>
+              <div className="hero-copy">
+  <span className="eyebrow"><T k="hero_eyebrow" /></span>
+  <h1>
+    <T k="hero_title_1" />
+    <span className="text-gradient"><T k="hero_title_2" /></span>
+  </h1>
+  <p className="lead"><T k="hero_lead" /></p>
+
+  <div className="cta-row">
+    <Link href="/contact" className="btn btn-primary"><T k="hero_cta_primary" /></Link>
+    <Link href="/features" className="btn btn-secondary"><T k="hero_cta_secondary" /></Link>
+  </div>
+
+  <ul className="trust-list" aria-label="Key metrics">
+    {trustMetrics.map((metric) => (
+      <li key={metric.value}>
+        <strong>{metric.value}</strong>
+        <span><T k={metric.key} /></span>
+      </li>
+    ))}
+  </ul>
+</div>
 
                 <div className="chart-block">
                   <div className="chart-header">
