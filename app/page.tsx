@@ -1,50 +1,3 @@
-NanoFile
-NanoFile
-Search
-0-github-profile-avatar.png
-74.7 KB
-1793441823182.jpg
-2.9 MB
-Borehole_Diagnostic_and_Rehabilitation_Plan_(2).docx
-15.0 MB
-Borehole_Diagnostic_and_Rehabilitation_Plan_(2).pdf
-14.5 MB
-chahin tv.apk
-12.5 MB
-Claude Setup.exe
-6.9 MB
-driver-hub-install__31.exe
-791.2 KB
-Facture_PF-2026-015_Boumous_Cheikh-v4.docx
-34.6 KB
-mermaid-diagram.png
-106.0 KB
-Modele_Bordereau_d_Envoi_ANRH.docx
-44.4 KB
-Modele_Rapport_Endoscopie_Forage.docx
-4.9 KB
-NotebookLM Mind Map (1).png
-2.0 MB
-NotebookLM Mind Map (2).png
-2.0 MB
-NotebookLM Mind Map (3).png
-207.7 KB
-NotebookLM Mind Map.png
-207.7 KB
-officedeploymenttool_20131-20090.exe
-3.4 MB
-Page_de_Garde_Rapport_Endoscopie.docx
-40.6 KB
-page.tsx
-17.7 KB
-Qoder-win-x64-user.exe
-228.2 MB
-Rapport EURL BST V1 (1) 01-08-2026.doc
-17.9 MB
-vlc-3.0.24-win64.exe
-44.1 MB
-wps_wid.cid-180325513.1785578753.exe
-5.2 MB
 import Link from 'next/link';
 import { T } from './i18n';
 
@@ -134,6 +87,7 @@ export default function Page() {
             <span className="brand-mark">C</span>
             <span>CreatorPilot</span>
           </Link>
+
           <nav className="main-nav" aria-label="Main navigation">
             <Link href="/features"><T k="nav_features" /></Link>
             <Link href="/about"><T k="nav_about" /></Link>
@@ -143,6 +97,7 @@ export default function Page() {
           </nav>
         </div>
       </header>
+
       <section className="hero">
         <div className="container hero-grid">
           <div className="hero-copy">
@@ -152,10 +107,12 @@ export default function Page() {
               <span className="text-gradient"><T k="hero_title_2" /></span>
             </h1>
             <p className="lead"><T k="hero_lead" /></p>
+
             <div className="cta-row">
               <Link href="/contact" className="btn btn-primary"><T k="hero_cta_primary" /></Link>
               <Link href="/features" className="btn btn-secondary"><T k="hero_cta_secondary" /></Link>
             </div>
+
             <ul className="trust-list" aria-label="Key metrics">
               {trustMetrics.map((metric) => (
                 <li key={metric.value}>
@@ -165,6 +122,7 @@ export default function Page() {
               ))}
             </ul>
           </div>
+
           <div className="hero-visual">
             <div className="glass-card dashboard-card animate-float">
               <div className="dashboard-topbar">
@@ -172,6 +130,7 @@ export default function Page() {
                 <span />
                 <span />
               </div>
+
               <div className="dashboard-body">
                 <div className="metric-row">
                   <div className="metric large-metric">
@@ -184,6 +143,7 @@ export default function Page() {
                     <strong>19</strong>
                   </div>
                 </div>
+
                 <div className="chart-block">
                   <div className="chart-header">
                     <span>Content growth</span>
@@ -199,6 +159,7 @@ export default function Page() {
                     <span style={{ height: '100%' }} />
                   </div>
                 </div>
+
                 <div className="activity-list">
                   <div>
                     <span className="dot green" />
@@ -214,6 +175,7 @@ export default function Page() {
           </div>
         </div>
       </section>
+
       <section className="logos">
         <div className="container">
           <p className="section-label">Trusted by teams shipping content at scale</p>
@@ -224,12 +186,14 @@ export default function Page() {
           </div>
         </div>
       </section>
+
       <section className="section">
         <div className="container">
           <div className="section-head">
             <span className="eyebrow">See it in action</span>
             <h2>Built to make content production feel effortless.</h2>
           </div>
+
           <div className="mockup-grid">
             <div className="mockup-column">
               <div className="mockup-card mockup-window animate-rise">
@@ -264,6 +228,7 @@ export default function Page() {
                 </div>
               </div>
             </div>
+
             <div className="mockup-column stack-column">
               <div className="mockup-card mini-panel animate-rise delay-1">
                 <div className="mini-header">
@@ -278,6 +243,7 @@ export default function Page() {
                   <span>CTA</span>
                 </div>
               </div>
+
               <div className="mockup-card mini-panel animate-rise delay-2">
                 <div className="mini-header">
                   <span className="eyebrow tiny-eyebrow">Publishing</span>
@@ -297,12 +263,14 @@ export default function Page() {
           </div>
         </div>
       </section>
+
       <section className="section section-alt">
         <div className="container">
           <div className="section-head">
             <span className="eyebrow">Proof</span>
             <h2>Teams scale faster when the workflow is clear.</h2>
           </div>
+
           <div className="proof-grid">
             {customerProof.map((item) => (
               <article key={item.label} className="proof-card">
@@ -314,12 +282,14 @@ export default function Page() {
           </div>
         </div>
       </section>
+
       <section className="section">
         <div className="container">
           <div className="section-head">
             <span className="eyebrow">What it does</span>
             <h2>Everything your content engine needs.</h2>
           </div>
+
           <div className="services-grid">
             {features.map((feature) => (
               <article className="service-card" key={feature.number}>
@@ -331,6 +301,7 @@ export default function Page() {
           </div>
         </div>
       </section>
+
       <section className="section section-alt">
         <div className="container impact-grid">
           <div className="impact-copy">
@@ -341,6 +312,7 @@ export default function Page() {
               From idea to publishing, the system keeps your pipeline organized and scalable.
             </p>
           </div>
+
           <div className="stats-grid">
             <div className="stat-card glass-card">
               <strong>6.2x</strong>
@@ -357,12 +329,14 @@ export default function Page() {
           </div>
         </div>
       </section>
+
       <section className="section">
         <div className="container">
           <div className="section-head">
             <span className="eyebrow">How it works</span>
             <h2>A simple workflow. Maximum output.</h2>
           </div>
+
           <div className="process-grid">
             <div className="process-step">
               <span className="step-number">1</span>
@@ -387,12 +361,14 @@ export default function Page() {
           </div>
         </div>
       </section>
+
       <section className="section section-alt">
         <div className="container">
           <div className="section-head">
             <span className="eyebrow">Client feedback</span>
             <h2>The right workflow changes everything.</h2>
           </div>
+
           <div className="testimonial-grid">
             {testimonials.map((item) => (
               <blockquote className="testimonial" key={item.author}>
@@ -406,6 +382,7 @@ export default function Page() {
           </div>
         </div>
       </section>
+
       <section className="section newsletter-section">
         <div className="container newsletter-grid">
           <div className="newsletter-copy">
@@ -416,6 +393,7 @@ export default function Page() {
               and a cleaner publishing routine without burning out your team.
             </p>
           </div>
+
           <form action="https://formsubmit.co/micdigitalproduct@gmail.com" method="POST" className="newsletter-form">
             <div className="input-group">
               <input type="email" name="email" placeholder="Enter your work email" aria-label="Work email" required />
@@ -429,6 +407,7 @@ export default function Page() {
           </form>
         </div>
       </section>
+
       <section className="section">
         <div className="container">
           <div className="pricing-preview">
@@ -436,6 +415,7 @@ export default function Page() {
               <span className="eyebrow">Plans</span>
               <h2>Simple pricing to grow your content engine.</h2>
             </div>
+
             <div className="pricing-grid">
               <article className="pricing-card">
                 <p className="plan-name">Starter</p>
@@ -449,6 +429,7 @@ export default function Page() {
                 </ul>
                 <Link href="/pricing" className="btn btn-secondary">View pricing</Link>
               </article>
+
               <article className="pricing-card featured">
                 <span className="popular">Most popular</span>
                 <p className="plan-name">Growth</p>
@@ -462,6 +443,7 @@ export default function Page() {
                 </ul>
                 <Link href="/pricing" className="btn btn-primary">View pricing</Link>
               </article>
+
               <article className="pricing-card">
                 <p className="plan-name">Scale</p>
                 <h3>Custom</h3>
@@ -478,6 +460,7 @@ export default function Page() {
           </div>
         </div>
       </section>
+
       <section className="section cta-section">
         <div className="container cta-box">
           <div>
@@ -487,6 +470,7 @@ export default function Page() {
           <Link href="/contact" className="btn btn-primary">Book a demo</Link>
         </div>
       </section>
+
       <footer className="site-footer">
         <div className="container footer-inner">
           <p>© {new Date().getFullYear()} CreatorPilot</p>
