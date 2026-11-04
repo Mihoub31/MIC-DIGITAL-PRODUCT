@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { T } from './i18n';
+import { T, EmailField } from './i18n';
 
 const features = [
   { number: '01', title: 'feat_1_title', text: 'feat_1_text' },
@@ -19,27 +19,22 @@ const trustMetrics = [
 const proofLogos = ['Notion', 'Stripe', 'Figma', 'Slack', 'Webflow', 'Linear'];
 
 const testimonials = [
-  {
-    quote: 'CreatorPilot gave our content team a repeatable production engine. We publish faster and with more consistency.',
-    author: 'Aiden Moore',
-    role: 'Founder, Creator Brand'
-  },
-  {
-    quote: 'It turned our chaotic content process into a real system. We generate campaign-ready assets in minutes.',
-    author: 'Lina Patel',
-    role: 'Marketing Lead, Digital Agency'
-  },
-  {
-    quote: 'We finally have a way to scale video storytelling without hiring a huge production team.',
-    author: 'Samir Haddad',
-    role: 'Product Marketer, SaaS Brand'
-  }
+  { quote: 't1_quote', author: 'Aiden Moore', role: 't1_role' },
+  { quote: 't2_quote', author: 'Lina Patel', role: 't2_role' },
+  { quote: 't3_quote', author: 'Samir Haddad', role: 't3_role' }
 ];
 
 const customerProof = [
   { stat: '6.2x', label: 'proof_1_label', detail: 'proof_1_detail' },
   { stat: '74%', label: 'proof_2_label', detail: 'proof_2_detail' },
   { stat: '3.1x', label: 'proof_3_label', detail: 'proof_3_detail' }
+];
+
+const steps = [
+  { number: '1', title: 'step_1_title', text: 'step_1_text' },
+  { number: '2', title: 'step_2_title', text: 'step_2_text' },
+  { number: '3', title: 'step_3_title', text: 'step_3_text' },
+  { number: '4', title: 'step_4_title', text: 'step_4_text' }
 ];
 
 export default function Page() {
@@ -269,12 +264,9 @@ export default function Page() {
       <section className="section section-alt">
         <div className="container impact-grid">
           <div className="impact-copy">
-            <span className="eyebrow">Built for growth</span>
-            <h2>Fewer tools. Faster production. More consistent output.</h2>
-            <p>
-              We built CreatorPilot for teams that want to move faster without sacrificing quality.
-              From idea to publishing, the system keeps your pipeline organized and scalable.
-            </p>
+            <span className="eyebrow"><T k="impact_eyebrow" /></span>
+            <h2><T k="impact_title" /></h2>
+            <p><T k="impact_text" /></p>
           </div>
 
           <div className="stats-grid">
@@ -297,31 +289,18 @@ export default function Page() {
       <section className="section">
         <div className="container">
           <div className="section-head">
-            <span className="eyebrow">How it works</span>
-            <h2>A simple workflow. Maximum output.</h2>
+            <span className="eyebrow"><T k="process_eyebrow" /></span>
+            <h2><T k="process_title" /></h2>
           </div>
 
           <div className="process-grid">
-            <div className="process-step">
-              <span className="step-number">1</span>
-              <h3>Brief</h3>
-              <p>Add a topic, niche, audience, or campaign goal and let the system build the strategy.</p>
-            </div>
-            <div className="process-step">
-              <span className="step-number">2</span>
-              <h3>Generate</h3>
-              <p>Create scripts, hooks, scenes, outlines, and text variants in seconds.</p>
-            </div>
-            <div className="process-step">
-              <span className="step-number">3</span>
-              <h3>Refine</h3>
-              <p>Edit tone, storytelling, format, and publishing direction inside one workflow.</p>
-            </div>
-            <div className="process-step">
-              <span className="step-number">4</span>
-              <h3>Publish</h3>
-              <p>Schedule videos, automate delivery, and use performance data to scale what works.</p>
-            </div>
+            {steps.map((step) => (
+              <div className="process-step" key={step.number}>
+                <span className="step-number">{step.number}</span>
+                <h3><T k={step.title} /></h3>
+                <p><T k={step.text} /></p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -329,17 +308,17 @@ export default function Page() {
       <section className="section section-alt">
         <div className="container">
           <div className="section-head">
-            <span className="eyebrow">Client feedback</span>
-            <h2>The right workflow changes everything.</h2>
+            <span className="eyebrow"><T k="fb_eyebrow" /></span>
+            <h2><T k="fb_title" /></h2>
           </div>
 
           <div className="testimonial-grid">
             {testimonials.map((item) => (
               <blockquote className="testimonial" key={item.author}>
-                <p>“{item.quote}”</p>
+                <p>“<T k={item.quote} />”</p>
                 <footer>
                   <strong>{item.author}</strong>
-                  <span>{item.role}</span>
+                  <span><T k={item.role} /></span>
                 </footer>
               </blockquote>
             ))}
@@ -350,21 +329,18 @@ export default function Page() {
       <section className="section newsletter-section">
         <div className="container newsletter-grid">
           <div className="newsletter-copy">
-            <span className="eyebrow">Free growth kit</span>
-            <h2>Get the 7-day creator growth playbook.</h2>
-            <p>
-              Join the newsletter for a simple system to generate better scripts, stronger hooks,
-              and a cleaner publishing routine without burning out your team.
-            </p>
+            <span className="eyebrow"><T k="nl_eyebrow" /></span>
+            <h2><T k="nl_title" /></h2>
+            <p><T k="nl_text" /></p>
           </div>
 
           <form action="https://formsubmit.co/micdigitalproduct@gmail.com" method="POST" className="newsletter-form">
             <div className="input-group">
-              <input type="email" name="email" placeholder="Enter your work email" aria-label="Work email" required />
-              <button type="submit" className="btn btn-primary">Get the kit</button>
+              <EmailField k="nl_placeholder" />
+              <button type="submit" className="btn btn-primary"><T k="nl_button" /></button>
             </div>
             <div className="form-meta">
-              <span>No spam. One useful email each week.</span>
+              <span><T k="nl_meta" /></span>
             </div>
             <input type="hidden" name="_subject" value="New CreatorPilot growth kit request" />
             <input type="hidden" name="_captcha" value="false" />
@@ -376,49 +352,49 @@ export default function Page() {
         <div className="container">
           <div className="pricing-preview">
             <div className="section-head pricing-head">
-              <span className="eyebrow">Plans</span>
-              <h2>Simple pricing to grow your content engine.</h2>
+              <span className="eyebrow"><T k="pr_eyebrow" /></span>
+              <h2><T k="pr_title" /></h2>
             </div>
 
             <div className="pricing-grid">
               <article className="pricing-card">
                 <p className="plan-name">Starter</p>
                 <h3>$29</h3>
-                <p className="plan-desc">For solo creators and lean teams.</p>
+                <p className="plan-desc"><T k="pr_starter_desc" /></p>
                 <ul>
-                  <li>3 active campaigns</li>
-                  <li>AI script generation</li>
-                  <li>Thumbnail ideas</li>
-                  <li>1 publishing channel</li>
+                  <li><T k="pr_starter_1" /></li>
+                  <li><T k="pr_starter_2" /></li>
+                  <li><T k="pr_starter_3" /></li>
+                  <li><T k="pr_starter_4" /></li>
                 </ul>
-                <Link href="/pricing" className="btn btn-secondary">View pricing</Link>
+                <Link href="/pricing" className="btn btn-secondary"><T k="pr_view" /></Link>
               </article>
 
               <article className="pricing-card featured">
-                <span className="popular">Most popular</span>
+                <span className="popular"><T k="pr_popular" /></span>
                 <p className="plan-name">Growth</p>
                 <h3>$99</h3>
-                <p className="plan-desc">For creators and agencies scaling faster.</p>
+                <p className="plan-desc"><T k="pr_growth_desc" /></p>
                 <ul>
-                  <li>Unlimited campaigns</li>
-                  <li>Voiceover & scripting</li>
-                  <li>Multi-channel publishing</li>
-                  <li>Analytics dashboard</li>
+                  <li><T k="pr_growth_1" /></li>
+                  <li><T k="pr_growth_2" /></li>
+                  <li><T k="pr_growth_3" /></li>
+                  <li><T k="pr_growth_4" /></li>
                 </ul>
-                <Link href="/pricing" className="btn btn-primary">View pricing</Link>
+                <Link href="/pricing" className="btn btn-primary"><T k="pr_view" /></Link>
               </article>
 
               <article className="pricing-card">
                 <p className="plan-name">Scale</p>
-                <h3>Custom</h3>
-                <p className="plan-desc">For brands with complex needs.</p>
+                <h3><T k="pr_custom" /></h3>
+                <p className="plan-desc"><T k="pr_scale_desc" /></p>
                 <ul>
-                  <li>Team collaboration</li>
-                  <li>Custom automations</li>
-                  <li>Brand kits</li>
-                  <li>Priority onboarding</li>
+                  <li><T k="pr_scale_1" /></li>
+                  <li><T k="pr_scale_2" /></li>
+                  <li><T k="pr_scale_3" /></li>
+                  <li><T k="pr_scale_4" /></li>
                 </ul>
-                <Link href="/contact" className="btn btn-secondary">Request quote</Link>
+                <Link href="/contact" className="btn btn-secondary"><T k="pr_quote" /></Link>
               </article>
             </div>
           </div>
@@ -428,10 +404,10 @@ export default function Page() {
       <section className="section cta-section">
         <div className="container cta-box">
           <div>
-            <span className="eyebrow">Let’s build your engine</span>
-            <h2>Need a smarter way to scale your content and video output?</h2>
+            <span className="eyebrow"><T k="cta_eyebrow" /></span>
+            <h2><T k="cta_title" /></h2>
           </div>
-          <Link href="/contact" className="btn btn-primary">Book a demo</Link>
+          <Link href="/contact" className="btn btn-primary"><T k="cta_button" /></Link>
         </div>
       </section>
 
@@ -439,9 +415,9 @@ export default function Page() {
         <div className="container footer-inner">
           <p>© {new Date().getFullYear()} CreatorPilot</p>
           <div className="footer-links">
-            <Link href="/features">Features</Link>
-            <Link href="/pricing">Pricing</Link>
-            <Link href="/contact">Contact</Link>
+            <Link href="/features"><T k="nav_features" /></Link>
+            <Link href="/pricing"><T k="nav_pricing" /></Link>
+            <Link href="/contact"><T k="nav_contact" /></Link>
           </div>
         </div>
       </footer>
