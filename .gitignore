@@ -1,3 +1,31 @@
-module.exports = {
-  ignoreDuringBuilds: true,
-};
+node_modules/
+.env
+.env.*
+!.env.example
+.next/
+out/
+dist/
+build/
+coverage/
+*.log
+.DS_Store
+
+# Local backups and temporary tests
+*.backup
+*.backup*
+*.bak
+*.auth-backup
+test-backup.js
+test-security.js
+run-auth-migration.js
+run-migration-backup.js
+server.js
+
+# Local database inspection scripts
+check-backup-tables.js
+inspect-db.js
+inspect-rls.js
+inspect-roles.js
+
+# Temporary inspection file
+= {
