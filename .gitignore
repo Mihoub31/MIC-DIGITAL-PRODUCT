@@ -19,7 +19,7 @@ test-backup.js
 test-security.js
 run-auth-migration.js
 run-migration-backup.js
-server.js
+*.tsbuildinfo
 
 # Local database inspection scripts
 check-backup-tables.js
@@ -29,3 +29,4 @@ inspect-roles.js
 
 # Temporary inspection file
 = {
+local-backups/

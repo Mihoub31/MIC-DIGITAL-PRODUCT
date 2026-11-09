@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS public.roles (
 
 INSERT INTO public.roles (code, description)
 VALUES
-    ('owner', 'Proprietaire de l'espace'),
+    ('owner', 'Propriétaire de l''espace'),
     ('admin', 'Administrateur'),
     ('manager', 'Gestionnaire'),
     ('member', 'Membre'),
