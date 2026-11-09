@@ -78,7 +78,10 @@ async function main() {
 
   const client = new Client({
     connectionString: url,
-    ssl: /localhost|127\.0\.0\.1/.test(url) ? false : { rejectUnauthorized: true },
+    ssl:
+      process.env.DATABASE_SSL === 'false' || /localhost|127\.0\.0\.1/.test(url)
+        ? false
+        : { rejectUnauthorized: true },
     application_name: 'creatorpilot-migrate',
     max: 1,
   });

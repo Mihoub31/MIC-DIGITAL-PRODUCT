@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
-const apiUrl = (process.env.API_URL || 'http://localhost:3002').replace(/\/+$/, '');
+// Render's fromService resolves to a bare host (no scheme); local dev passes a full URL.
+const rawApiUrl = process.env.API_URL || 'http://localhost:3002';
+const apiUrl = (/^https?:\/\//i.test(rawApiUrl) ? rawApiUrl : `https://${rawApiUrl}`).replace(/\/+$/, '');
 
 const nextConfig = {
   reactStrictMode: true,
