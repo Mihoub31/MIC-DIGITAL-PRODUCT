@@ -1,6 +1,81 @@
+# Render Blueprint for CreatorPilot.
+#
+# One managed Postgres database, the Express API and the Next.js frontend.
+# The API owns the schema (pre-deploy migration) and the frontend proxies
+# /api/* to it, so session cookies stay on the public site origin.
+#
+# Before the first deploy:
+#   1. Render prompts for APP_ORIGIN (see sync: false below). Paste the
+#      frontend URL, e.g. https://creatorpilot-web.onrender.com.
+#   2. If you use a custom domain for the frontend, add it to EXTRA_ORIGINS
+#      on the API service (comma-separated) so CORS and the origin guard allow it.
+#   3. Keep the database and both services in the same region: the internal
+#      database URL only resolves inside one region.
+#
+# Plans: both services use "starter" because pre-deploy commands are not
+# available on free instances. The database defaults to the free plan, which
+# expires after 90 days - move it to a paid plan before launch. To run on a
+# free web service, remove preDeployCommand and run
+#   npm run db:migrate:production
+# manually against the production database before the first deploy.
+
+databases:
+  - name: creatorpilot-db
+    databaseName: creatorpilot
+    user: creatorpilot
+    region: frankfurt
+    plan: free
+    postgresMajorVersion: '16'
+
 services:
   - type: web
-    name: mic-digital-product
-    runtime: static
-    buildCommand: npm install && npm run build
-    staticPublishPath: out
+    name: creatorpilot-api
+    runtime: node
+    region: frankfurt
+    plan: starter
+    branch: main
+    autoDeploy: true
+    buildCommand: npm ci --omit=dev
+    preDeployCommand: npm run db:migrate:production
+    startCommand: node server.js
+    healthCheckPath: /health
+    maxShutdownDelaySeconds: 20
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: creatorpilot-db
+          property: connectionString
+      # Internal Render connections stay on the private network and do not need
+      # TLS. Set to true only if you switch DATABASE_URL to the external address
+      # and the certificate chain is trusted by Node.
+      - key: DATABASE_SSL
+        value: 'false'
+      - key: SESSION_SECRET
+        generateValue: true
+      # Set on the first blueprint deploy: https://<frontend host>
+      - key: APP_ORIGIN
+        sync: false
+      - key: TRUST_PROXY
+        value: 'true'
+
+  - type: web
+    name: creatorpilot-web
+    runtime: node
+    region: frankfurt
+    plan: starter
+    branch: main
+    autoDeploy: true
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start -- -p $PORT
+    healthCheckPath: /login/
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # fromService returns a bare host; next.config.mjs adds the https scheme.
+      - key: API_URL
+        fromService:
+          type: web
+          name: creatorpilot-api
+          property: host
