@@ -109,6 +109,16 @@ export function errorMessageKey(error: unknown): string {
       return 'err_invalid_token';
     case 'invalid_password':
       return 'err_invalid_password';
+    case 'invalid_role':
+      return 'err_invalid_role';
+    case 'forbidden':
+      return 'err_forbidden';
+    case 'owner_protected':
+      return 'err_owner_protected';
+    case 'user_not_found':
+      return 'err_user_not_found';
+    case 'conflict':
+      return 'err_workspace_conflict';
     case 'network_error':
       return 'api_network_error';
     default:

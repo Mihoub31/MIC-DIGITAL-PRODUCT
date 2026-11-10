@@ -32,7 +32,9 @@ services:
     autoDeploy: true
     # next.config.mjs rewrites /api/* at build time, so API_URL must already be
     # set while the build runs - hence a literal value instead of fromService.
-    buildCommand: npm ci && npm run build
+    # --include=dev keeps TypeScript/Next build tooling available when the build
+    # environment sets NODE_ENV=production.
+    buildCommand: npm ci --include=dev && npm run build
     startCommand: node scripts/start-all.js
     healthCheckPath: /login/
     envVars:

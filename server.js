@@ -34,6 +34,8 @@ const server = app.listen(config.port, async () => {
   console.log(`[api] allowed origins: ${config.allowedOrigins.join(', ')}`);
   if (!config.emailConfigured) {
     console.log('[api] email provider not configured - password reset emails will not be sent');
+  } else {
+    console.log(`[api] email provider: ${config.emailProvider}`);
   }
   try {
     await assertSchemaReady();

@@ -41,6 +41,14 @@ function validateName(name, errors, field = 'fullName') {
   return value;
 }
 
+function validateWorkspaceName(name, errors, field = 'name') {
+  const value = normalizeName(name);
+  collect(errors, field, !value, 'Workspace name is required.');
+  collect(errors, field, value.length > 0 && value.length < 2, 'Workspace name is too short.');
+  collect(errors, field, value.length > 150, 'Workspace name is too long.');
+  return value;
+}
+
 function validateLanguage(language, errors, field = 'language') {
   if (language === undefined || language === null || language === '') return 'fr';
   const value = String(language).toLowerCase();
@@ -96,6 +104,8 @@ module.exports = {
   LANGUAGES,
   normalizeEmail,
   hasErrors,
+  validateEmail,
+  validateWorkspaceName,
   validateRegistration,
   validateLogin,
   validateProfileUpdate,

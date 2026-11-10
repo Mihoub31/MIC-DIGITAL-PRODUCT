@@ -1,11 +1,7 @@
 import Link from 'next/link';
+import { T } from '../i18n';
 
-const values = [
-  'Creator-first design',
-  'Purpose-built for content teams',
-  'Operational clarity across every campaign',
-  'AI-assisted execution with strategic control'
-];
+const values = ['ab_value_1', 'ab_value_2', 'ab_value_3', 'ab_value_4'];
 
 export default function AboutPage() {
   return (
@@ -17,36 +13,31 @@ export default function AboutPage() {
             <span>CreatorPilot</span>
           </Link>
           <nav className="main-nav" aria-label="Main navigation">
-            <Link href="/features">Features</Link>
-            <Link href="/about">About</Link>
-            <Link href="/pricing">Pricing</Link>
-            <Link href="/contact">Contact</Link>
-            <Link href="/contact" className="btn btn-primary nav-cta">Start free</Link>
+            <Link href="/features"><T k="nav_features" /></Link>
+            <Link href="/about"><T k="nav_about" /></Link>
+            <Link href="/pricing"><T k="nav_pricing" /></Link>
+            <Link href="/contact"><T k="nav_contact" /></Link>
+            <Link href="/contact" className="btn btn-primary nav-cta"><T k="nav_start" /></Link>
           </nav>
         </div>
       </header>
 
       <section className="page-hero">
         <div className="container narrow">
-          <span className="eyebrow">About</span>
-          <h1>We built CreatorPilot for people who need more than AI prompts.</h1>
-          <p>
-            CreatorPilot is designed for modern creators, small teams, and growth-focused brands that want a repeatable content engine instead of disconnected tools.
-          </p>
+          <span className="eyebrow"><T k="ab_eyebrow" /></span>
+          <h1><T k="ab_title" /></h1>
+          <p><T k="ab_lead" /></p>
         </div>
       </section>
 
       <section className="section">
         <div className="container two-column about-layout">
           <div>
-            <span className="eyebrow">Our mission</span>
-            <h2>Help teams create faster, publish smarter, and scale with less friction.</h2>
+            <span className="eyebrow"><T k="ab_mission_eyebrow" /></span>
+            <h2><T k="ab_mission_title" /></h2>
           </div>
           <div>
-            <p>
-              Most content teams don’t need more AI outputs; they need a system that turns ideas into strategy, publishing, and measurable results.
-              CreatorPilot brings those moving parts together in one operating layer.
-            </p>
+            <p><T k="ab_mission_text" /></p>
           </div>
         </div>
       </section>
@@ -57,7 +48,7 @@ export default function AboutPage() {
             {values.map((item) => (
               <div className="value-card" key={item}>
                 <div className="icon">✦</div>
-                <p>{item}</p>
+                <p><T k={item} /></p>
               </div>
             ))}
           </div>
@@ -68,9 +59,9 @@ export default function AboutPage() {
         <div className="container footer-inner">
           <p>© {new Date().getFullYear()} CreatorPilot</p>
           <div className="footer-links">
-            <Link href="/features">Features</Link>
-            <Link href="/pricing">Pricing</Link>
-            <Link href="/contact">Contact</Link>
+            <Link href="/features"><T k="nav_features" /></Link>
+            <Link href="/pricing"><T k="nav_pricing" /></Link>
+            <Link href="/contact"><T k="nav_contact" /></Link>
           </div>
         </div>
       </footer>

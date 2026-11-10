@@ -1,4 +1,7 @@
 import Link from 'next/link';
+import { T } from '../i18n';
+
+const points = ['ct_point_1', 'ct_point_2', 'ct_point_3'];
 
 export default function ContactPage() {
   return (
@@ -10,34 +13,32 @@ export default function ContactPage() {
             <span>CreatorPilot</span>
           </Link>
           <nav className="main-nav" aria-label="Main navigation">
-            <Link href="/features">Features</Link>
-            <Link href="/about">About</Link>
-            <Link href="/pricing">Pricing</Link>
-            <Link href="/contact">Contact</Link>
-            <Link href="/contact" className="btn btn-primary nav-cta">Start free</Link>
+            <Link href="/features"><T k="nav_features" /></Link>
+            <Link href="/about"><T k="nav_about" /></Link>
+            <Link href="/pricing"><T k="nav_pricing" /></Link>
+            <Link href="/contact"><T k="nav_contact" /></Link>
+            <Link href="/contact" className="btn btn-primary nav-cta"><T k="nav_start" /></Link>
           </nav>
         </div>
       </header>
 
       <section className="page-hero">
         <div className="container narrow">
-          <span className="eyebrow">Contact</span>
-          <h1>Let’s build your content engine.</h1>
-          <p>Tell us what you’re creating, where you’re publishing, and what your team needs to scale.</p>
+          <span className="eyebrow"><T k="ct_eyebrow" /></span>
+          <h1><T k="ct_title" /></h1>
+          <p><T k="ct_lead" /></p>
         </div>
       </section>
 
       <section className="section">
         <div className="container contact-layout">
           <div className="contact-panel">
-            <h2>Tell us about your workflow.</h2>
-            <p>
-              We’ll help you design a content system for your team, your channels, and your growth goals.
-            </p>
+            <h2><T k="ct_panel_title" /></h2>
+            <p><T k="ct_panel_text" /></p>
             <ul className="contact-list">
-              <li>Strategy + AI workflow planning</li>
-              <li>Content systems for launch and growth</li>
-              <li>Support for creators, agencies, and brands</li>
+              {points.map((point) => (
+                <li key={point}><T k={point} /></li>
+              ))}
             </ul>
           </div>
 
@@ -45,39 +46,39 @@ export default function ContactPage() {
             <form action="https://formsubmit.co/micdigitalproduct@gmail.com" method="POST" className="contact-form">
               <div className="field-row two-col">
                 <div className="field">
-                  <label htmlFor="name">Full name</label>
-                  <input id="name" name="name" type="text" placeholder="Your name" required />
+                  <label htmlFor="name"><T k="ct_name" /></label>
+                  <input id="name" name="name" type="text" required />
                 </div>
                 <div className="field">
-                  <label htmlFor="email">Email</label>
+                  <label htmlFor="email"><T k="ct_email" /></label>
                   <input id="email" name="email" type="email" placeholder="you@example.com" required />
                 </div>
               </div>
 
               <div className="field-row two-col">
                 <div className="field">
-                  <label htmlFor="company">Company</label>
-                  <input id="company" name="company" type="text" placeholder="Brand or agency" />
+                  <label htmlFor="company"><T k="ct_company" /></label>
+                  <input id="company" name="company" type="text" />
                 </div>
                 <div className="field">
-                  <label htmlFor="budget">Budget range</label>
+                  <label htmlFor="budget"><T k="ct_budget" /></label>
                   <select id="budget" name="budget">
-                    <option value="under-500">Under $500</option>
-                    <option value="500-2000">$500 – $2,000</option>
-                    <option value="2000-5000">$2,000 – $5,000</option>
-                    <option value="5000plus">$5,000+</option>
+                    <option value="under-500"><T k="ct_budget_1" /></option>
+                    <option value="500-2000"><T k="ct_budget_2" /></option>
+                    <option value="2000-5000"><T k="ct_budget_3" /></option>
+                    <option value="5000plus"><T k="ct_budget_4" /></option>
                   </select>
                 </div>
               </div>
 
               <div className="field">
-                <label htmlFor="message">Project details</label>
-                <textarea id="message" name="message" rows={6} placeholder="Tell us about the content you want to create and the channels you’re using..." required />
+                <label htmlFor="message"><T k="ct_message" /></label>
+                <textarea id="message" name="message" rows={6} required />
               </div>
 
               <input type="hidden" name="_subject" value="New CreatorPilot inquiry" />
               <input type="hidden" name="_captcha" value="false" />
-              <button type="submit" className="btn btn-primary submit-btn">Send inquiry</button>
+              <button type="submit" className="btn btn-primary submit-btn"><T k="ct_send" /></button>
             </form>
           </div>
         </div>
@@ -87,8 +88,8 @@ export default function ContactPage() {
         <div className="container footer-inner">
           <p>© {new Date().getFullYear()} CreatorPilot</p>
           <div className="footer-links">
-            <Link href="/features">Features</Link>
-            <Link href="/pricing">Pricing</Link>
+            <Link href="/features"><T k="nav_features" /></Link>
+            <Link href="/pricing"><T k="nav_pricing" /></Link>
           </div>
         </div>
       </footer>

@@ -7,7 +7,22 @@ import { languages, useLang, useT } from '../i18n';
 import { apiRequest, describeError } from '../lib/api';
 import type { SessionUser, WorkspaceSummary } from '../lib/api';
 
-type Tab = 'overview' | 'profile' | 'security' | 'language';
+type Tab = 'overview' | 'workspaces' | 'profile' | 'security' | 'language';
+
+type WorkspaceMember = {
+  id: string;
+  full_name: string;
+  email: string;
+  role: string;
+  status: string;
+  joined_at: string;
+};
+
+type WorkspaceDetail = {
+  workspace: { id: string; name: string; slug: string; created_at?: string };
+  role: string;
+  members: WorkspaceMember[];
+};
 
 const LOCALES: Record<string, string> = {
   fr: 'fr-FR',
@@ -18,6 +33,11 @@ const LOCALES: Record<string, string> = {
 };
 
 const ROLE_KEYS = new Set(['owner', 'admin', 'manager', 'member', 'client']);
+
+const RANKS: Record<string, number> = { owner: 5, admin: 4, manager: 3, member: 2, client: 1 };
+const ASSIGNABLE_ROLES = ['admin', 'manager', 'member', 'client'];
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function initials(fullName: string): string {
   return fullName
@@ -59,7 +79,31 @@ export default function DashboardShell({
   const [languageNotice, setLanguageNotice] = useState('');
   const [savingLanguage, setSavingLanguage] = useState(false);
 
+  const [workspaceList, setWorkspaceList] = useState<WorkspaceSummary[]>(workspaces);
+  const [selectedWorkspaceId, setSelectedWorkspaceId] = useState(workspaces[0]?.id ?? '');
+  const [workspaceDetail, setWorkspaceDetail] = useState<WorkspaceDetail | null>(null);
+  const [workspaceLoading, setWorkspaceLoading] = useState(false);
+  const [workspaceError, setWorkspaceError] = useState('');
+  const [workspaceNotice, setWorkspaceNotice] = useState('');
+  const [workspaceVersion, setWorkspaceVersion] = useState(0);
+
+  const [newWorkspaceName, setNewWorkspaceName] = useState('');
+  const [creatingWorkspace, setCreatingWorkspace] = useState(false);
+  const [renameName, setRenameName] = useState('');
+  const [savingWorkspace, setSavingWorkspace] = useState(false);
+  const [deleteArmed, setDeleteArmed] = useState(false);
+  const [deletingWorkspace, setDeletingWorkspace] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState('');
+  const [inviteRole, setInviteRole] = useState('member');
+  const [inviting, setInviting] = useState(false);
+  const [memberBusyId, setMemberBusyId] = useState('');
+
   const languageSynced = useRef(false);
+  const tRef = useRef(t);
+
+  useEffect(() => {
+    tRef.current = t;
+  });
 
   useEffect(() => {
     if (languageSynced.current) return;
@@ -85,6 +129,32 @@ export default function DashboardShell({
     }
   }, [user.language, setLang]);
 
+  useEffect(() => {
+    if (tab !== 'workspaces' || !selectedWorkspaceId) return;
+
+    let cancelled = false;
+    setWorkspaceLoading(true);
+    setWorkspaceError('');
+
+    apiRequest<WorkspaceDetail>(`/api/workspaces/${selectedWorkspaceId}`)
+      .then((data) => {
+        if (cancelled) return;
+        setWorkspaceDetail(data);
+        setRenameName((previous) => (previous && data.workspace.name !== previous ? previous : data.workspace.name));
+      })
+      .catch((caught) => {
+        if (cancelled) return;
+        setWorkspaceError(describeError(caught, tRef.current));
+      })
+      .finally(() => {
+        if (!cancelled) setWorkspaceLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [tab, selectedWorkspaceId, workspaceVersion]);
+
   const locale = LOCALES[lang] || 'fr-FR';
 
   function formatDate(value: string | null): string {
@@ -103,6 +173,40 @@ export default function DashboardShell({
     if (status === 'active') return t('dash_status_active');
     if (status === 'suspended') return t('dash_status_suspended');
     return status;
+  }
+
+  const activeWorkspace = workspaceList.find((item) => item.id === selectedWorkspaceId) || null;
+  const myWorkspaceRole = workspaceDetail?.role || activeWorkspace?.role || '';
+  const myRank = RANKS[myWorkspaceRole] || 0;
+  const assignableRoles = ASSIGNABLE_ROLES.filter((role) => (RANKS[role] || 0) < myRank);
+  const inviteRoleValue = assignableRoles.includes(inviteRole) ? inviteRole : assignableRoles[0] || 'member';
+  const canInvite = myRank >= 3 && assignableRoles.length > 0;
+  const canUpdateWorkspace = myRank >= 3;
+  const canDeleteWorkspace = myRank >= 5;
+  const canManageMembers = myRank >= 4;
+
+  function refreshWorkspace() {
+    setWorkspaceVersion((value) => value + 1);
+  }
+
+  function clearWorkspaceFeedback() {
+    setWorkspaceError('');
+    setWorkspaceNotice('');
+  }
+
+  function selectWorkspace(id: string) {
+    setSelectedWorkspaceId(id);
+    setWorkspaceDetail(null);
+    setRenameName('');
+    setDeleteArmed(false);
+    setInviteEmail('');
+    setMemberBusyId('');
+    clearWorkspaceFeedback();
+  }
+
+  function openWorkspaces(id: string) {
+    selectWorkspace(id);
+    setTab('workspaces');
   }
 
   async function signOut() {
@@ -192,8 +296,159 @@ export default function DashboardShell({
     }
   }
 
+  async function createWorkspace(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    clearWorkspaceFeedback();
+
+    const name = newWorkspaceName.trim();
+    if (!name) {
+      setWorkspaceError(t('err_required'));
+      return;
+    }
+
+    setCreatingWorkspace(true);
+    try {
+      const data = await apiRequest<{ workspace: WorkspaceSummary }>('/api/workspaces', { body: { name } });
+      selectWorkspace(data.workspace.id);
+      setWorkspaceList((previous) => [...previous, data.workspace]);
+      setNewWorkspaceName('');
+      setWorkspaceNotice('ws_created');
+    } catch (caught) {
+      setWorkspaceError(describeError(caught, t));
+    } finally {
+      setCreatingWorkspace(false);
+    }
+  }
+
+  async function renameWorkspace(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!selectedWorkspaceId || !workspaceDetail) return;
+    clearWorkspaceFeedback();
+
+    const name = renameName.trim();
+    if (!name) {
+      setWorkspaceError(t('err_required'));
+      return;
+    }
+    if (name === workspaceDetail.workspace.name) return;
+
+    setSavingWorkspace(true);
+    try {
+      const data = await apiRequest<{ workspace: { id: string; name: string } }>(
+        `/api/workspaces/${selectedWorkspaceId}`,
+        { method: 'PATCH', body: { name } }
+      );
+      setWorkspaceList((previous) =>
+        previous.map((item) => (item.id === data.workspace.id ? { ...item, name: data.workspace.name } : item))
+      );
+      setWorkspaceDetail((previous) =>
+        previous && previous.workspace.id === data.workspace.id
+          ? { ...previous, workspace: { ...previous.workspace, name: data.workspace.name } }
+          : previous
+      );
+      setRenameName(data.workspace.name);
+      setWorkspaceNotice('ws_renamed');
+    } catch (caught) {
+      setWorkspaceError(describeError(caught, t));
+    } finally {
+      setSavingWorkspace(false);
+    }
+  }
+
+  async function deleteWorkspace() {
+    if (!selectedWorkspaceId) return;
+    clearWorkspaceFeedback();
+    setDeletingWorkspace(true);
+
+    try {
+      await apiRequest(`/api/workspaces/${selectedWorkspaceId}`, { method: 'DELETE' });
+      const remaining = workspaceList.filter((item) => item.id !== selectedWorkspaceId);
+      setWorkspaceList(remaining);
+      setWorkspaceDetail(null);
+      setDeleteArmed(false);
+      setSelectedWorkspaceId(remaining[0]?.id ?? '');
+      setRenameName('');
+      setWorkspaceNotice('ws_deleted');
+      setWorkspaceVersion((value) => value + 1);
+    } catch (caught) {
+      setWorkspaceError(describeError(caught, t));
+    } finally {
+      setDeletingWorkspace(false);
+    }
+  }
+
+  async function inviteMember(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!selectedWorkspaceId) return;
+    clearWorkspaceFeedback();
+
+    const email = inviteEmail.trim();
+    if (!EMAIL_PATTERN.test(email)) {
+      setWorkspaceError(t('err_invalid_email'));
+      return;
+    }
+
+    setInviting(true);
+    try {
+      await apiRequest(`/api/workspaces/${selectedWorkspaceId}/members`, {
+        body: { email, role: inviteRoleValue },
+      });
+      setInviteEmail('');
+      setWorkspaceNotice('ws_invited');
+      refreshWorkspace();
+    } catch (caught) {
+      setWorkspaceError(describeError(caught, t));
+    } finally {
+      setInviting(false);
+    }
+  }
+
+  async function changeMemberRole(member: WorkspaceMember, role: string) {
+    if (!selectedWorkspaceId || role === member.role) return;
+    clearWorkspaceFeedback();
+    setMemberBusyId(member.id);
+
+    try {
+      await apiRequest(`/api/workspaces/${selectedWorkspaceId}/members/${member.id}`, {
+        method: 'PATCH',
+        body: { role },
+      });
+      setWorkspaceDetail((previous) =>
+        previous
+          ? { ...previous, members: previous.members.map((item) => (item.id === member.id ? { ...item, role } : item)) }
+          : previous
+      );
+      setWorkspaceNotice('ws_role_updated');
+      refreshWorkspace();
+    } catch (caught) {
+      setWorkspaceError(describeError(caught, t));
+    } finally {
+      setMemberBusyId('');
+    }
+  }
+
+  async function removeMember(member: WorkspaceMember) {
+    if (!selectedWorkspaceId) return;
+    clearWorkspaceFeedback();
+    setMemberBusyId(member.id);
+
+    try {
+      await apiRequest(`/api/workspaces/${selectedWorkspaceId}/members/${member.id}`, { method: 'DELETE' });
+      setWorkspaceDetail((previous) =>
+        previous ? { ...previous, members: previous.members.filter((item) => item.id !== member.id) } : previous
+      );
+      setWorkspaceNotice('ws_removed');
+      refreshWorkspace();
+    } catch (caught) {
+      setWorkspaceError(describeError(caught, t));
+    } finally {
+      setMemberBusyId('');
+    }
+  }
+
   const tabs: Array<{ id: Tab; key: string }> = [
     { id: 'overview', key: 'dash_nav_overview' },
+    { id: 'workspaces', key: 'dash_nav_workspaces' },
     { id: 'profile', key: 'dash_nav_profile' },
     { id: 'security', key: 'dash_nav_security' },
     { id: 'language', key: 'dash_nav_language' },
@@ -267,18 +522,264 @@ export default function DashboardShell({
                 </dl>
 
                 <h2 className="dash-subtitle">{t('dash_workspaces')}</h2>
-                {workspaces.length === 0 ? (
+                {workspaceList.length === 0 ? (
                   <p className="dash-empty">{t('dash_no_workspace')}</p>
                 ) : (
                   <ul className="dash-workspaces">
-                    {workspaces.map((workspace) => (
+                    {workspaceList.map((workspace) => (
                       <li key={workspace.id} className="dash-workspace">
                         <span className="dash-workspace-name">{workspace.name}</span>
-                        <span className="role-pill">{roleLabel(workspace.role)}</span>
+                        <span className="dash-workspace-actions">
+                          <span className="role-pill">{roleLabel(workspace.role)}</span>
+                          <button
+                            type="button"
+                            className="dash-workspace-manage"
+                            onClick={() => openWorkspaces(workspace.id)}
+                          >
+                            {t('ws_manage')}
+                          </button>
+                        </span>
                       </li>
                     ))}
                   </ul>
                 )}
+              </section>
+            )}
+
+            {tab === 'workspaces' && (
+              <section aria-labelledby="dash-workspaces-title">
+                <h2 id="dash-workspaces-title" className="dash-subtitle">{t('ws_title')}</h2>
+                <p className="lead">{t('ws_lead')}</p>
+
+                {workspaceError && (
+                  <p className="form-error" role="alert" aria-live="polite">{workspaceError}</p>
+                )}
+                {workspaceNotice && (
+                  <p className="form-success" role="status" aria-live="polite">{t(workspaceNotice)}</p>
+                )}
+
+                <div className="ws-layout">
+                  <aside className="ws-sidebar">
+                    <h3 className="ws-heading">{t('ws_your')}</h3>
+                    {workspaceList.length === 0 ? (
+                      <p className="dash-empty">{t('dash_no_workspace')}</p>
+                    ) : (
+                      <ul className="ws-list">
+                        {workspaceList.map((workspace) => (
+                          <li key={workspace.id}>
+                            <button
+                              type="button"
+                              className={`ws-list-item${workspace.id === selectedWorkspaceId ? ' is-active' : ''}`}
+                              aria-pressed={workspace.id === selectedWorkspaceId}
+                              onClick={() => selectWorkspace(workspace.id)}
+                            >
+                              <span className="ws-list-name">{workspace.name}</span>
+                              <span className="role-pill">{roleLabel(workspace.role)}</span>
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
+                    <form className="ws-create" onSubmit={createWorkspace} noValidate>
+                      <label className="ws-label" htmlFor="ws-new">{t('ws_create_label')}</label>
+                      <input
+                        id="ws-new"
+                        name="name"
+                        type="text"
+                        value={newWorkspaceName}
+                        maxLength={80}
+                        placeholder={t('ws_name_placeholder')}
+                        onChange={(event) => setNewWorkspaceName(event.target.value)}
+                      />
+                      <button className="btn btn-primary" type="submit" disabled={creatingWorkspace}>
+                        {creatingWorkspace ? t('api_loading') : t('ws_create_btn')}
+                      </button>
+                    </form>
+                  </aside>
+
+                  <div className="ws-detail">
+                    {!selectedWorkspaceId ? (
+                      <p className="dash-empty">{t('ws_select_hint')}</p>
+                    ) : workspaceDetail ? (
+                      <>
+                        <div className="ws-detail-head">
+                          <h3 className="ws-name">{workspaceDetail.workspace.name}</h3>
+                          <span className="role-pill">{roleLabel(workspaceDetail.role)}</span>
+                        </div>
+
+                        {canUpdateWorkspace && (
+                          <form className="ws-rename" onSubmit={renameWorkspace} noValidate>
+                            <label className="ws-label" htmlFor="ws-rename">{t('ws_rename_label')}</label>
+                            <div className="ws-inline">
+                              <input
+                                id="ws-rename"
+                                name="name"
+                                type="text"
+                                value={renameName}
+                                maxLength={80}
+                                onChange={(event) => setRenameName(event.target.value)}
+                              />
+                              <button
+                                className="btn btn-secondary"
+                                type="submit"
+                                disabled={
+                                  savingWorkspace ||
+                                  !renameName.trim() ||
+                                  renameName.trim() === workspaceDetail.workspace.name
+                                }
+                              >
+                                {savingWorkspace ? t('api_loading') : t('ws_rename_btn')}
+                              </button>
+                            </div>
+                          </form>
+                        )}
+
+                        <h4 className="ws-heading">{t('ws_members_title')}</h4>
+                        <div className="ws-table-wrap">
+                          <table className="ws-table">
+                            <thead>
+                              <tr>
+                                <th scope="col">{t('ws_member')}</th>
+                                <th scope="col">{t('dash_role')}</th>
+                                <th scope="col">{t('dash_status')}</th>
+                                <th scope="col"><span className="ws-visually-hidden">{t('ws_actions')}</span></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {workspaceDetail.members.map((member) => {
+                                const memberRank = RANKS[member.role] || 0;
+                                const canEditRole =
+                                  canManageMembers && member.role !== 'owner' && memberRank < myRank;
+                                const canRemoveMember =
+                                  canManageMembers &&
+                                  member.role !== 'owner' &&
+                                  member.id !== user.id &&
+                                  memberRank < myRank;
+
+                                return (
+                                  <tr key={member.id}>
+                                    <th scope="row" className="ws-member-cell">
+                                      <span className="ws-member-name">{member.full_name}</span>
+                                      <span className="ws-member-email" dir="ltr">{member.email}</span>
+                                    </th>
+                                    <td>
+                                      {canEditRole ? (
+                                        <select
+                                          className="ws-role-select"
+                                          value={member.role}
+                                          disabled={memberBusyId === member.id}
+                                          aria-label={`${t('dash_role')} — ${member.full_name}`}
+                                          onChange={(event) => changeMemberRole(member, event.target.value)}
+                                        >
+                                          {assignableRoles.map((role) => (
+                                            <option key={role} value={role}>{roleLabel(role)}</option>
+                                          ))}
+                                        </select>
+                                      ) : (
+                                        <span
+                                          className="role-pill"
+                                          title={member.role === 'owner' ? t('ws_owner_locked') : undefined}
+                                        >
+                                          {roleLabel(member.role)}
+                                        </span>
+                                      )}
+                                    </td>
+                                    <td>
+                                      <span className={`status-pill status-${member.status}`}>{statusLabel(member.status)}</span>
+                                    </td>
+                                    <td className="ws-actions-cell">
+                                      {canRemoveMember && (
+                                        <button
+                                          className="ws-danger"
+                                          type="button"
+                                          disabled={memberBusyId === member.id}
+                                          onClick={() => removeMember(member)}
+                                        >
+                                          {t('ws_remove_btn')}
+                                        </button>
+                                      )}
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
+
+                        {canInvite && (
+                          <form className="ws-invite" onSubmit={inviteMember} noValidate>
+                            <h4 className="ws-heading">{t('ws_invite_title')}</h4>
+                            <div className="ws-inline">
+                              <input
+                                id="ws-invite-email"
+                                name="email"
+                                type="email"
+                                dir="ltr"
+                                value={inviteEmail}
+                                maxLength={254}
+                                placeholder={t('ws_invite_email')}
+                                aria-label={t('ws_invite_email')}
+                                onChange={(event) => setInviteEmail(event.target.value)}
+                              />
+                              <select
+                                className="ws-role-select"
+                                value={inviteRoleValue}
+                                aria-label={t('dash_role')}
+                                disabled={inviting}
+                                onChange={(event) => setInviteRole(event.target.value)}
+                              >
+                                {assignableRoles.map((role) => (
+                                  <option key={role} value={role}>{roleLabel(role)}</option>
+                                ))}
+                              </select>
+                              <button className="btn btn-primary" type="submit" disabled={inviting}>
+                                {inviting ? t('api_loading') : t('ws_invite_btn')}
+                              </button>
+                            </div>
+                          </form>
+                        )}
+
+                        {canDeleteWorkspace && (
+                          <div className="ws-danger-zone">
+                            <p className="ws-danger-text">{t('ws_delete_warning')}</p>
+                            <div className="ws-inline">
+                              <button
+                                className="btn btn-secondary ws-danger-btn"
+                                type="button"
+                                disabled={deletingWorkspace}
+                                onClick={() => {
+                                  if (deleteArmed) {
+                                    deleteWorkspace();
+                                  } else {
+                                    setDeleteArmed(true);
+                                  }
+                                }}
+                              >
+                                {deletingWorkspace
+                                  ? t('api_loading')
+                                  : deleteArmed
+                                    ? t('ws_delete_confirm')
+                                    : t('ws_delete_btn')}
+                              </button>
+                              {deleteArmed && !deletingWorkspace && (
+                                <button
+                                  className="btn btn-secondary"
+                                  type="button"
+                                  onClick={() => setDeleteArmed(false)}
+                                >
+                                  {t('ws_delete_cancel')}
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <p className="dash-empty">{workspaceLoading ? t('api_loading') : t('ws_select_hint')}</p>
+                    )}
+                  </div>
+                </div>
               </section>
             )}
 
