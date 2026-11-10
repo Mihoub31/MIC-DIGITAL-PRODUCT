@@ -9,6 +9,37 @@ function parseList(value) {
     .filter(Boolean);
 }
 
+function parseSmtpUrl(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  let parsed;
+  try {
+    parsed = new URL(raw);
+  } catch {
+    throw new Error('SMTP_URL must be a valid URL (smtp:// or smtps://).');
+  }
+  if (parsed.protocol !== 'smtp:' && parsed.protocol !== 'smtps:') {
+    throw new Error('SMTP_URL must use the smtp:// or smtps:// scheme.');
+  }
+  if (!parsed.hostname) {
+    throw new Error('SMTP_URL must include a hostname.');
+  }
+  return raw;
+}
+
+function parseEmailFrom(value, appName, usingResend) {
+  const raw = String(value || '').trim();
+  if (!raw) {
+    return usingResend ? `${appName} <onboarding@resend.dev>` : '';
+  }
+  const bracketed = raw.match(/<([^<>]+)>$/);
+  const address = (bracketed ? bracketed[1] : raw).trim();
+  if (!/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(address)) {
+    throw new Error('EMAIL_FROM must be a valid email address, e.g. "CreatorPilot <no-reply@example.com>".');
+  }
+  return raw;
+}
+
 function loadConfig(env = process.env) {
   const missing = REQUIRED.filter((key) => !env[key]);
   if (missing.length > 0) {
@@ -22,6 +53,16 @@ function loadConfig(env = process.env) {
 
   const isProduction = env.NODE_ENV === 'production';
   const appOrigin = env.APP_ORIGIN || 'http://localhost:3000';
+  const appName = env.APP_NAME || 'CreatorPilot';
+  const smtpUrl = parseSmtpUrl(env.SMTP_URL);
+  const resendApiKey = String(env.RESEND_API_KEY || '').trim();
+  const emailFrom = parseEmailFrom(env.EMAIL_FROM, appName, Boolean(resendApiKey));
+
+  if (smtpUrl && !emailFrom) {
+    throw new Error('EMAIL_FROM is required when SMTP_URL is configured.');
+  }
+
+  const emailProvider = smtpUrl ? 'smtp' : resendApiKey ? 'resend' : null;
 
   return {
     env: env.NODE_ENV || 'development',
@@ -35,8 +76,12 @@ function loadConfig(env = process.env) {
     trustProxy: env.TRUST_PROXY === 'true' ? 1 : false,
     bcryptRounds: Number(env.BCRYPT_ROUNDS) || 12,
     sessionDays: Number(env.SESSION_DAYS) || 7,
-    emailConfigured: Boolean(env.SMTP_URL || env.RESEND_API_KEY),
-    appName: env.APP_NAME || 'CreatorPilot',
+    emailProvider,
+    emailConfigured: Boolean(emailProvider),
+    emailFrom,
+    smtpUrl,
+    resendApiKey: emailProvider === 'resend' ? resendApiKey : '',
+    appName,
   };
 }
 

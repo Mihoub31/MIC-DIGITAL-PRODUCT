@@ -14,6 +14,7 @@ const {
 } = require('../validate');
 const { issueCsrfToken, requireAuth, audit } = require('../middleware');
 const { withTransaction } = require('../db');
+const { createEmailService } = require('../email');
 
 const RESET_TOKEN_TTL_MINUTES = 60;
 const MAX_FAILED_ATTEMPTS = 5;
@@ -51,6 +52,7 @@ function hashToken(token) {
 
 function buildAuthRoutes({ pool, config }) {
   const router = express.Router();
+  const mailer = createEmailService(config);
 
   const loginLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -268,7 +270,7 @@ function buildAuthRoutes({ pool, config }) {
       if (!email) return res.status(202).json(response);
 
       const { rows } = await pool.query(
-        'SELECT id FROM users WHERE LOWER(email) = $1 AND status <> $2',
+        'SELECT id, full_name, preferred_language FROM users WHERE LOWER(email) = $1 AND status <> $2',
         [email, 'suspended']
       );
 
@@ -290,11 +292,26 @@ function buildAuthRoutes({ pool, config }) {
 
       await audit(pool, req, 'auth.password_reset_requested', { userId: rows[0].id });
 
-      if (!config.emailConfigured) {
+      const resetUrl = `${config.appOrigin}/reset-password/?token=${encodeURIComponent(token)}`;
+
+      if (mailer.configured) {
+        try {
+          await mailer.sendResetEmail({
+            to: email,
+            name: rows[0].full_name,
+            resetUrl,
+            language: rows[0].preferred_language,
+          });
+        } catch (error) {
+          console.error(`[email] Failed to send password reset email via ${mailer.provider}:`, error.message);
+        }
+      } else if (!config.isProduction) {
         console.warn(
           `[email] Not configured (SMTP_URL / RESEND_API_KEY missing). No email was sent. ` +
-            `Local reset link: ${config.appOrigin}/reset-password/?token=${token}`
+            `Local reset link: ${resetUrl}`
         );
+      } else {
+        console.error('[email] Not configured (SMTP_URL / RESEND_API_KEY missing). No password reset email was sent.');
       }
 
       return res.status(202).json(response);

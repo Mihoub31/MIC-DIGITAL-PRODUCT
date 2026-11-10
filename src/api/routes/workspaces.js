@@ -6,7 +6,7 @@ const express = require('express');
 const { asyncHandler, conflict } = require('../http');
 const { requireAuth, requireWorkspacePermission, audit } = require('../middleware');
 const { can, RANK } = require('../rbac');
-const { validateName, validateEmail, hasErrors } = require('../validate');
+const { validateWorkspaceName, validateEmail, hasErrors } = require('../validate');
 const { withTransaction } = require('../db');
 
 const ASSIGNABLE_ROLES = ['admin', 'manager', 'member', 'client'];
@@ -50,7 +50,7 @@ module.exports = function buildWorkspaceRoutes({ pool }) {
     '/',
     asyncHandler(async (req, res) => {
       const errors = {};
-      const name = validateName(req.body && req.body.name, errors, 'name');
+      const name = validateWorkspaceName(req.body && req.body.name, errors, 'name');
       if (hasErrors(errors)) return res.status(400).json({ error: { code: 'validation_failed', message: 'Workspace name is required.', details: errors } });
 
       const workspace = await withTransaction(pool, async (client) => {
@@ -104,7 +104,7 @@ module.exports = function buildWorkspaceRoutes({ pool }) {
     requirePerm('workspace.update'),
     asyncHandler(async (req, res) => {
       const errors = {};
-      const name = validateName(req.body && req.body.name, errors, 'name');
+      const name = validateWorkspaceName(req.body && req.body.name, errors, 'name');
       if (hasErrors(errors)) return res.status(400).json({ error: { code: 'validation_failed', message: 'Workspace name is required.', details: errors } });
 
       const { rows } = await pool.query(

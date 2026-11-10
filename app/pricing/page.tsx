@@ -1,28 +1,29 @@
 import Link from 'next/link';
+import { T } from '../i18n';
 
 const plans = [
   {
     name: 'Starter',
     price: '$29',
-    description: 'Perfect for solo creators who need consistent cadence.',
-    features: ['3 active campaigns', 'AI script generation', 'Thumbnail ideas', '1 publishing channel'],
-    cta: 'Get started',
+    descKey: 'pc_starter_desc',
+    featureKeys: ['pc_starter_1', 'pc_starter_2', 'pc_starter_3', 'pc_starter_4'],
+    ctaKey: 'pc_starter_cta',
     featured: false
   },
   {
     name: 'Growth',
     price: '$99',
-    description: 'For creators and agencies scaling content output every week.',
-    features: ['Unlimited campaigns', 'Voiceover & scripting', 'Multi-channel publishing', 'Analytics dashboard'],
-    cta: 'Choose Growth',
+    descKey: 'pc_growth_desc',
+    featureKeys: ['pc_growth_1', 'pc_growth_2', 'pc_growth_3', 'pc_growth_4'],
+    ctaKey: 'pc_growth_cta',
     featured: true
   },
   {
     name: 'Scale',
-    price: 'Custom',
-    description: 'For brands with custom workflows and advanced operations.',
-    features: ['Team collaboration', 'Custom automations', 'Brand kits', 'Priority onboarding'],
-    cta: 'Request quote',
+    price: null,
+    descKey: 'pc_scale_desc',
+    featureKeys: ['pc_scale_1', 'pc_scale_2', 'pc_scale_3', 'pc_scale_4'],
+    ctaKey: 'pc_scale_cta',
     featured: false
   }
 ];
@@ -37,20 +38,20 @@ export default function PricingPage() {
             <span>CreatorPilot</span>
           </Link>
           <nav className="main-nav" aria-label="Main navigation">
-            <Link href="/features">Features</Link>
-            <Link href="/about">About</Link>
-            <Link href="/pricing">Pricing</Link>
-            <Link href="/contact">Contact</Link>
-            <Link href="/contact" className="btn btn-primary nav-cta">Start free</Link>
+            <Link href="/features"><T k="nav_features" /></Link>
+            <Link href="/about"><T k="nav_about" /></Link>
+            <Link href="/pricing"><T k="nav_pricing" /></Link>
+            <Link href="/contact"><T k="nav_contact" /></Link>
+            <Link href="/contact" className="btn btn-primary nav-cta"><T k="nav_start" /></Link>
           </nav>
         </div>
       </header>
 
       <section className="page-hero">
         <div className="container narrow">
-          <span className="eyebrow">Pricing</span>
-          <h1>Simple plans built for growth.</h1>
-          <p>Pick the plan that matches your current content volume and scale smoothly as your output grows.</p>
+          <span className="eyebrow"><T k="pc_eyebrow" /></span>
+          <h1><T k="pc_title" /></h1>
+          <p><T k="pc_lead" /></p>
         </div>
       </section>
 
@@ -59,17 +60,17 @@ export default function PricingPage() {
           <div className="pricing-grid page-pricing-grid">
             {plans.map((plan) => (
               <article key={plan.name} className={`pricing-card ${plan.featured ? 'featured' : ''}`}>
-                {plan.featured && <span className="popular">Most popular</span>}
+                {plan.featured && <span className="popular"><T k="pc_popular" /></span>}
                 <p className="plan-name">{plan.name}</p>
-                <h3>{plan.price}</h3>
-                <p className="plan-desc">{plan.description}</p>
+                <h3>{plan.price ?? <T k="pc_custom" />}</h3>
+                <p className="plan-desc"><T k={plan.descKey} /></p>
                 <ul>
-                  {plan.features.map((feature) => (
-                    <li key={feature}>{feature}</li>
+                  {plan.featureKeys.map((feature) => (
+                    <li key={feature}><T k={feature} /></li>
                   ))}
                 </ul>
                 <Link href="/contact" className={`btn ${plan.featured ? 'btn-primary' : 'btn-secondary'}`}>
-                  {plan.cta}
+                  <T k={plan.ctaKey} />
                 </Link>
               </article>
             ))}
@@ -80,8 +81,8 @@ export default function PricingPage() {
       <section className="section section-alt">
         <div className="container calculator-box">
           <div className="section-head left-aligned">
-            <span className="eyebrow">Estimator</span>
-            <h2>See how much your monthly output could cost.</h2>
+            <span className="eyebrow"><T k="pc_estimator_eyebrow" /></span>
+            <h2><T k="pc_estimator_title" /></h2>
           </div>
           <div className="estimate-card">
             <div className="estimate-item">
@@ -94,7 +95,7 @@ export default function PricingPage() {
             </div>
             <div className="estimate-item">
               <span>Scale</span>
-              <strong>Custom</strong>
+              <strong><T k="pc_custom" /></strong>
             </div>
           </div>
         </div>
@@ -104,8 +105,8 @@ export default function PricingPage() {
         <div className="container footer-inner">
           <p>© {new Date().getFullYear()} CreatorPilot</p>
           <div className="footer-links">
-            <Link href="/features">Features</Link>
-            <Link href="/contact">Contact</Link>
+            <Link href="/features"><T k="nav_features" /></Link>
+            <Link href="/contact"><T k="nav_contact" /></Link>
           </div>
         </div>
       </footer>

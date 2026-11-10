@@ -1,31 +1,20 @@
 import Link from 'next/link';
+import { T } from '../i18n';
 
 const featureCategories = [
-  {
-    title: 'Content planning',
-    text: 'Build complete content systems from basic ideas, briefs, market signals, and audience goals.'
-  },
-  {
-    title: 'Campaign automation',
-    text: 'Generate scripts, titles, thumbnails, and publishing plans for each campaign in a single workflow.'
-  },
-  {
-    title: 'Creative QA',
-    text: 'Review message clarity, tone, call-to-action strength, and output quality before rollout.'
-  },
-  {
-    title: 'Publishing orchestration',
-    text: 'Coordinate the schedule, outputs, and channels your team needs to stay consistent and organized.'
-  }
+  { titleKey: 'ft_cat_1_title', textKey: 'ft_cat_1_text' },
+  { titleKey: 'ft_cat_2_title', textKey: 'ft_cat_2_text' },
+  { titleKey: 'ft_cat_3_title', textKey: 'ft_cat_3_text' },
+  { titleKey: 'ft_cat_4_title', textKey: 'ft_cat_4_text' }
 ];
 
-const useCases = [
-  'YouTube and Shorts channels',
-  'Creator-led brand content',
-  'Agency client content operations',
-  'Product marketing and launch assets',
-  'Growth teams and content repurposing',
-  'Founder-driven storytelling' 
+const useCases = ['ft_use_1', 'ft_use_2', 'ft_use_3', 'ft_use_4', 'ft_use_5', 'ft_use_6'];
+
+const steps = [
+  { number: '01', textKey: 'ft_step_1' },
+  { number: '02', textKey: 'ft_step_2' },
+  { number: '03', textKey: 'ft_step_3' },
+  { number: '04', textKey: 'ft_step_4' }
 ];
 
 export default function FeaturesPage() {
@@ -38,22 +27,20 @@ export default function FeaturesPage() {
             <span>CreatorPilot</span>
           </Link>
           <nav className="main-nav" aria-label="Main navigation">
-            <Link href="/features">Features</Link>
-            <Link href="/about">About</Link>
-            <Link href="/pricing">Pricing</Link>
-            <Link href="/contact">Contact</Link>
-            <Link href="/contact" className="btn btn-primary nav-cta">Start free</Link>
+            <Link href="/features"><T k="nav_features" /></Link>
+            <Link href="/about"><T k="nav_about" /></Link>
+            <Link href="/pricing"><T k="nav_pricing" /></Link>
+            <Link href="/contact"><T k="nav_contact" /></Link>
+            <Link href="/contact" className="btn btn-primary nav-cta"><T k="nav_start" /></Link>
           </nav>
         </div>
       </header>
 
       <section className="page-hero">
         <div className="container narrow">
-          <span className="eyebrow">Features</span>
-          <h1>Built to turn ideas into content systems.</h1>
-          <p>
-            CreatorPilot combines AI generation, workflow automation, and publishing logic so your team can move faster without sacrificing quality.
-          </p>
+          <span className="eyebrow"><T k="ft_eyebrow" /></span>
+          <h1><T k="ft_title" /></h1>
+          <p><T k="ft_lead" /></p>
         </div>
       </section>
 
@@ -61,10 +48,10 @@ export default function FeaturesPage() {
         <div className="container">
           <div className="feature-grid">
             {featureCategories.map((item) => (
-              <article className="feature-card" key={item.title}>
+              <article className="feature-card" key={item.titleKey}>
                 <div className="icon">✦</div>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
+                <h3><T k={item.titleKey} /></h3>
+                <p><T k={item.textKey} /></p>
               </article>
             ))}
           </div>
@@ -74,13 +61,13 @@ export default function FeaturesPage() {
       <section className="section section-alt">
         <div className="container">
           <div className="section-head">
-            <span className="eyebrow">Use cases</span>
-            <h2>Built for the way modern teams create.</h2>
+            <span className="eyebrow"><T k="ft_use_eyebrow" /></span>
+            <h2><T k="ft_use_title" /></h2>
           </div>
 
           <div className="use-case-grid">
             {useCases.map((item) => (
-              <div className="use-case-item" key={item}>{item}</div>
+              <div className="use-case-item" key={item}><T k={item} /></div>
             ))}
           </div>
         </div>
@@ -89,26 +76,16 @@ export default function FeaturesPage() {
       <section className="section">
         <div className="container two-column">
           <div>
-            <span className="eyebrow">Workflow</span>
-            <h2>From brief to optimization.</h2>
+            <span className="eyebrow"><T k="ft_flow_eyebrow" /></span>
+            <h2><T k="ft_flow_title" /></h2>
           </div>
           <div className="steps-list">
-            <div>
-              <strong>01</strong>
-              <p>Drop in a brief, audience, and campaign goal.</p>
-            </div>
-            <div>
-              <strong>02</strong>
-              <p>Generate scripts, hooks, titles, and content directions.</p>
-            </div>
-            <div>
-              <strong>03</strong>
-              <p>Refine the message, channel strategy, and publication timing.</p>
-            </div>
-            <div>
-              <strong>04</strong>
-              <p>Publish and optimize based on what performs best.</p>
-            </div>
+            {steps.map((step) => (
+              <div key={step.number}>
+                <strong>{step.number}</strong>
+                <p><T k={step.textKey} /></p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -117,8 +94,8 @@ export default function FeaturesPage() {
         <div className="container footer-inner">
           <p>© {new Date().getFullYear()} CreatorPilot</p>
           <div className="footer-links">
-            <Link href="/pricing">Pricing</Link>
-            <Link href="/contact">Contact</Link>
+            <Link href="/pricing"><T k="nav_pricing" /></Link>
+            <Link href="/contact"><T k="nav_contact" /></Link>
           </div>
         </div>
       </footer>
